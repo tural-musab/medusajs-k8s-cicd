@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: turan919/medusajs-demo:17afab7c6c6f597f8e48f691b1661ea2ff102fb4
+        image: turan919/medusajs-demo:latest
         ports:
         - containerPort: 80
         

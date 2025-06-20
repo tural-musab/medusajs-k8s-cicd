@@ -56,6 +56,8 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: nginx-config
+  namespace: medusajs-staging
 data:
   default.conf: |
     server {

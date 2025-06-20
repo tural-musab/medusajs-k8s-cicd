@@ -27,13 +27,13 @@ jobs:
         context: .
         push: true
         tags: |
-          tural-musab/medusajs-demo:latest
-          tural-musab/medusajs-demo:${{ github.sha }}
+          turan919/medusajs-demo:latest
+          turan919/medusajs-demo:${{ github.sha }}
     
     - name: Deploy to Staging
       run: |
         echo "🚀 Deploying to Staging environment..."
-        echo "✅ Docker image built: tural-musab/medusajs-demo:${{ github.sha }}"
+        echo "✅ Docker image built: turan919/medusajs-demo:${{ github.sha }}"
         echo "📊 Files to deploy:"
         ls -la k8s-manifests/*staging.yaml
         echo "🎯 Next: Update K8s deployment with new image"

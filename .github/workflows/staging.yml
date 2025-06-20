@@ -1,0 +1,25 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+    
+    - name: Deploy to Staging
+      run: |
+        echo "🚀 Deploying to Staging environment..."
+        echo "✅ Staging deployment would happen here"
+        echo "📊 Files to deploy:"
+        ls -la k8s-manifests/*staging.yaml

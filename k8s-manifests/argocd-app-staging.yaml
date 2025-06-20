@@ -13,7 +13,7 @@ spec:
       include: '*-staging.yaml'
   destination:
     server: https://kubernetes.default.svc
-    namespace: staging
+    namespace: medusajs-staging
   syncPolicy:
     automated:
       prune: true

@@ -32,6 +32,7 @@ jobs:
       with:
         context: .
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: |
           turan919/medusajs-demo:latest
           turan919/medusajs-demo:${{ github.sha }}

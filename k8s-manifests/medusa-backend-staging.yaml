@@ -19,15 +19,11 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:alpine
+        image: turan919/medusajs-demo:latest
         ports:
         - containerPort: 80
         
         # Custom nginx config (API simulation)
-        volumeMounts:
-        - name: nginx-config
-          mountPath: /etc/nginx/conf.d/default.conf
-          subPath: default.conf
         
         # Health check
         livenessProbe:
@@ -53,17 +49,12 @@ spec:
             memory: "128Mi"
             cpu: "100m"
       
-      volumes:
-      - name: nginx-config
-        configMap:
-          name: nginx-config
 
 ---
 # ConfigMap for Nginx (API endpoints simulation)
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nginx-config
 data:
   default.conf: |
     server {

@@ -30,10 +30,31 @@ jobs:
           turan919/medusajs-demo:latest
           turan919/medusajs-demo:${{ github.sha }}
     
-    - name: Deploy to Staging
+    - name: Update K8s deployment image
       run: |
-        echo "🚀 Deploying to Staging environment..."
-        echo "✅ Docker image built: turan919/medusajs-demo:${{ github.sha }}"
+        # Update staging YAML with new image
+        sed -i "s|turan919/medusajs-demo:.*|turan919/medusajs-demo:${{ github.sha }}|g" k8s-manifests/medusa-backend-staging.yaml
+        echo "✅ Updated image to: turan919/medusajs-demo:${{ github.sha }}"
+    
+    - name: Deploy to Local Kubernetes
+      run: |
+        echo "🚀 Deploying to Local Kubernetes Staging..."
         echo "📊 Files to deploy:"
         ls -la k8s-manifests/*staging.yaml
-        echo "🎯 Next: Update K8s deployment with new image"
+        
+        echo "🎯 Deployment commands (simulation):"
+        echo "kubectl apply -f k8s-manifests/postgres-staging.yaml"
+        echo "kubectl apply -f k8s-manifests/redis-staging.yaml"
+        echo "kubectl apply -f k8s-manifests/meilisearch-staging.yaml"
+        echo "kubectl apply -f k8s-manifests/medusa-configmap-staging.yaml"
+        echo "kubectl apply -f k8s-manifests/medusa-backend-staging.yaml"
+        echo "kubectl apply -f k8s-manifests/medusa-ingress-staging.yaml"
+        
+        echo "✅ Staging deployment simulation completed!"
+        
+    - name: Health Check
+      run: |
+        echo "🏥 Health check simulation:"
+        echo "curl http://medusa-staging.local/health"
+        echo "Expected: {\"status\":\"ok\",\"message\":\"CI/CD Demo Working!\",\"version\":\"v1.0\"}"
+        echo "✅ Health check would verify deployment success"

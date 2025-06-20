@@ -1,0 +1,28 @@
+# MedusaJS Ingress
+# External access için (tarayıcıdan erişim)
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: medusa-ingress
+  namespace: medusajs
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+  # Backend API erişimi
+  - host: medusa-api.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: medusa-backend-service
+            port:
+              number: 9000
+  
+  # Şimdilik sadece API'yi expose edelim
+  # Storefront ve Admin'i daha sonra ekleyeceğiz

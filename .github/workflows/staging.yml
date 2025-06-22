@@ -36,6 +36,8 @@ jobs:
         tags: |
           turan919/medusajs-demo:latest
           turan919/medusajs-demo:${{ github.sha }}
+        build-args: |
+          COMMIT_SHA=${{ github.sha }}
     
     - name: Update K8s deployment image
       run: |

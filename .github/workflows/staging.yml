@@ -34,17 +34,17 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: |
-          turan919/medusajs-demo:latest
-          turan919/medusajs-demo:${{ github.sha }}
+          turan919/medusajs-backend:latest
+          turan919/medusajs-backend:${{ github.sha }}
     
     - name: Update K8s deployment image
       run: |
         # Update image tag in staging deployment
-        sed -i "s|turan919/medusajs-demo:.*|turan919/medusajs-demo:${{ github.sha }}|g" k8s-manifests/medusa-backend-staging.yaml
+        sed -i "s|turan919/medusajs-backend:.*|turan919/medusajs-backend:${{ github.sha }}|g" k8s/overlays/staging/image-patch.yaml
         
         # Show the change
-        echo "✅ Updated image to: turan919/medusajs-demo:${{ github.sha }}"
-        grep "image:" k8s-manifests/medusa-backend-staging.yaml
+        echo "✅ Updated image to: turan919/medusajs-backend:${{ github.sha }}"
+        grep "image:" k8s/overlays/staging/image-patch.yaml
     
     - name: Commit and push K8s manifest changes
       run: |
@@ -55,7 +55,7 @@ jobs:
         if git diff --quiet; then
           echo "No changes to commit"
         else
-          git add k8s-manifests/medusa-backend-staging.yaml
-          git commit -m "🚀 Update staging deployment to turan919/medusajs-demo:${{ github.sha }}"
+          git add k8s/overlays/staging/image-patch.yaml
+          git commit -m "🚀 Update staging deployment to turan919/medusajs-backend:${{ github.sha }}"
           git push
         fi

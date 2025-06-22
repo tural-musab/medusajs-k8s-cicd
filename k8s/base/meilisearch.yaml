@@ -1,11 +1,7 @@
-# MeiliSearch Deployment ve Service
-# Search engine için kullanılır
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: meilisearch
-  namespace: medusajs-staging
   labels:
     app: meilisearch
 spec:
@@ -27,7 +23,10 @@ spec:
         - name: MEILI_ENV
           value: "development"
         - name: MEILI_MASTER_KEY
-          value: "your-master-key-change-this"  # Production'da Secret kullan
+          valueFrom:
+            secretKeyRef:
+              name: medusa-secrets
+              key: meilisearch-master-key
         volumeMounts:
         - name: meilisearch-storage
           mountPath: /meili_data
@@ -37,7 +36,6 @@ spec:
           claimName: meilisearch-pvc
 
 ---
-# MeiliSearch Service
 apiVersion: v1
 kind: Service
 metadata:
@@ -52,7 +50,6 @@ spec:
   type: ClusterIP
 
 ---
-# MeiliSearch PersistentVolumeClaim
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -62,4 +59,4 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 2Gi  # 2GB search index için
+      storage: 2Gi

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: storefront-config
+data:
+  NEXT_PUBLIC_MEDUSA_BACKEND_URL: "http://medusa-backend-service:9000"
+  NEXT_PUBLIC_BASE_URL: "http://localhost:3000"

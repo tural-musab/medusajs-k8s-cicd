@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storefront
+  labels:
+    app: storefront
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storefront
+  template:
+    metadata:
+      labels:
+        app: storefront
+    spec:
+      containers:
+      - name: storefront
+        image: turan919/medusajs-storefront:latest
+        ports:
+        - containerPort: 3000
+        
+        env:
+        - name: NEXT_PUBLIC_MEDUSA_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: storefront-config
+              key: NEXT_PUBLIC_MEDUSA_BACKEND_URL
+        - name: NEXT_PUBLIC_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: storefront-config
+              key: NEXT_PUBLIC_BASE_URL
+        - name: NEXT_TELEMETRY_DISABLED
+          value: "1"
+        - name: NODE_ENV
+          value: "production"
+        
+        livenessProbe:
+          httpGet:
+            path: /api/healthcheck
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        
+        readinessProbe:
+          httpGet:
+            path: /api/healthcheck
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storefront-service
+spec:
+  selector:
+    app: storefront
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+  type: ClusterIP

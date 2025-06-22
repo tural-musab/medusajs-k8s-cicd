@@ -1,6 +1,3 @@
-# Redis Deployment ve Service
-# Redis cache için kullanılır
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,7 +20,7 @@ spec:
         ports:
         - containerPort: 6379
         command: ["redis-server"]
-        args: ["--appendonly", "yes"]  # Data persistence aktif
+        args: ["--appendonly", "yes"]
         volumeMounts:
         - name: redis-storage
           mountPath: /data
@@ -33,7 +30,6 @@ spec:
           claimName: redis-pvc
 
 ---
-# Redis Service
 apiVersion: v1
 kind: Service
 metadata:
@@ -48,7 +44,6 @@ spec:
   type: ClusterIP
 
 ---
-# Redis PersistentVolumeClaim
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -58,4 +53,4 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi  # 1GB Redis için yeterli
+      storage: 1Gi

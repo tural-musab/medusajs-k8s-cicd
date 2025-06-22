@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medusa-backend
+  labels:
+    app: medusa-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: medusa-backend
+  template:
+    metadata:
+      labels:
+        app: medusa-backend
+    spec:
+      containers:
+      - name: medusa-backend
+        image: turan919/medusajs-backend:latest
+        ports:
+        - containerPort: 9000
+        
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: medusa-config
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: medusa-config
+              key: REDIS_URL
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: medusa-secrets
+              key: jwt-secret
+        - name: COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: medusa-secrets
+              key: cookie-secret
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 9000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medusa-backend-service
+spec:
+  selector:
+    app: medusa-backend
+  ports:
+  - protocol: TCP
+    port: 9000
+    targetPort: 9000
+  type: ClusterIP

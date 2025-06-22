@@ -1,0 +1,88 @@
+name: Build and Deploy Storefront
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'temp-repo/storefront/**'
+      - '.github/workflows/storefront.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-storefront:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Build and push Storefront Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./temp-repo/storefront
+        push: true
+        platforms: linux/amd64,linux/arm64
+        tags: |
+          turan919/medusajs-storefront:latest
+          turan919/medusajs-storefront:${{ github.sha }}
+    
+    - name: Update K8s storefront image
+      run: |
+        # Create storefront image patch if it doesn't exist in staging
+        if [ ! -f "k8s/overlays/staging/storefront-image-patch.yaml" ]; then
+          cat > k8s/overlays/staging/storefront-image-patch.yaml << 'EOF'
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: storefront
+        spec:
+          template:
+            spec:
+              containers:
+              - name: storefront
+                image: turan919/medusajs-storefront:latest
+        EOF
+        fi
+        
+        # Update image tag in staging deployment
+        sed -i "s|turan919/medusajs-storefront:.*|turan919/medusajs-storefront:${{ github.sha }}|g" k8s/overlays/staging/storefront-image-patch.yaml
+        
+        # Show the change
+        echo "✅ Updated storefront image to: turan919/medusajs-storefront:${{ github.sha }}"
+        grep "image:" k8s/overlays/staging/storefront-image-patch.yaml
+    
+    - name: Update staging kustomization
+      run: |
+        # Add storefront image patch to kustomization if not exists
+        if ! grep -q "storefront-image-patch.yaml" k8s/overlays/staging/kustomization.yaml; then
+          sed -i '/patchesStrategicMerge:/a - storefront-image-patch.yaml' k8s/overlays/staging/kustomization.yaml
+        fi
+    
+    - name: Commit and push K8s manifest changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        
+        # Check if there are changes
+        if git diff --quiet; then
+          echo "No changes to commit"
+        else
+          git add k8s/overlays/staging/storefront-image-patch.yaml
+          git add k8s/overlays/staging/kustomization.yaml
+          git commit -m "🚀 Update storefront deployment to turan919/medusajs-storefront:${{ github.sha }}"
+          git push
+        fi

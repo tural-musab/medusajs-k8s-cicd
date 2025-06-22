@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: medusajs-staging
+  labels:
+    app.kubernetes.io/part-of: medusajs
+    environment: staging

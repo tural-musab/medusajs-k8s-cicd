@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: medusa-backend
+  name: storefront
 spec:
   template:
     spec:
       containers:
-      - name: medusa-backend
-        image: turan919/medusajs-backend:latest
+      - name: storefront
+        image: turan919/medusajs-storefront:latest
         imagePullPolicy: Never

@@ -1,7 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: medusajs-production
+
 resources:
+- namespace.yaml
 - ../../base
 
 namePrefix: prod-
@@ -14,4 +17,5 @@ patchesStrategicMerge:
 - config-patch.yaml
 - image-patch.yaml
 - storefront-patch.yaml
+- resource-patch.yaml
 - ingress-patch.yaml

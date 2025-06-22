@@ -79,9 +79,10 @@ Modern, scalable e-commerce solution built with MedusaJS 2.0 and deployed on Kub
 
 ### Prerequisites
 
-- Kubernetes cluster (v1.24+)
-- kubectl CLI tool
-- Docker (for building images)
+- **Kubernetes**: v1.24+ cluster with kubectl access
+- **Node.js**: v22+ (for local development)
+- **Docker**: Latest version
+- **pnpm**: Package manager (installed automatically)
 
 ### 1. Clone Repository
 
@@ -90,35 +91,39 @@ git clone https://github.com/your-username/medusajs-k8s.git
 cd medusajs-k8s
 ```
 
-### 2. Configure Secrets
+### 2. Development Setup
 
 ```bash
-# Generate secure secrets
-./scripts/generate-secrets.sh
-
-# Or manually update k8s/base/secrets.yaml
+# Setup local development environment
+./scripts/dev-setup.sh
 ```
 
 ### 3. Deploy to Staging
 
 ```bash
-# Deploy all services
-kubectl apply -k k8s/overlays/staging/
-
-# Check deployment status
-kubectl get pods -l environment=staging
+# One-command staging deployment
+./scripts/deploy-staging.sh
 ```
 
-### 4. Access Application
+### 4. Access Applications
 
 ```bash
-# Port forward for local access
-kubectl port-forward svc/storefront-service 3000:3000
-kubectl port-forward svc/medusa-backend-service 9000:9000
+# Backend API and Admin
+http://localhost:9000
 
-# Access applications
-open http://localhost:3000    # Storefront
-open http://localhost:9000    # Admin Panel
+# Storefront
+http://localhost:3000
+
+# Health checks
+curl http://localhost:9000/health
+curl http://localhost:3000/api/healthcheck
+```
+
+### 5. Deploy to Production
+
+```bash
+# Production deployment (with safety checks)
+./scripts/deploy-production.sh
 ```
 
 ## 📚 Documentation

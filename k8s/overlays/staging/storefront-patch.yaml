@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: storefront-config
 data:
+  NEXT_PUBLIC_MEDUSA_BACKEND_URL: "http://staging-medusa-backend-service:9000"
   NEXT_PUBLIC_BASE_URL: "https://staging-store.your-domain.com"

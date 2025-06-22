@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: medusa-backend-monitor
+  labels:
+    app: medusa-backend
+spec:
+  selector:
+    matchLabels:
+      app: medusa-backend
+  endpoints:
+  - port: "9000"
+    path: /health
+    interval: 30s
+---
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: storefront-monitor
+  labels:
+    app: storefront
+spec:
+  selector:
+    matchLabels:
+      app: storefront
+  endpoints:
+  - port: "3000"
+    path: /api/healthcheck
+    interval: 30s

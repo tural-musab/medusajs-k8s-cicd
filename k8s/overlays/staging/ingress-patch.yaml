@@ -7,11 +7,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - staging-api.your-domain.com
-    - staging-store.your-domain.com
+    - staging-api.realcart.shop
+    - staging.realcart.shop
     secretName: staging-tls-secret
   rules:
-  - host: staging-store.your-domain.com
+  - host: staging.realcart.shop
     http:
       paths:
       - path: /
@@ -21,7 +21,7 @@ spec:
             name: storefront-service
             port:
               number: 3000
-  - host: staging-api.your-domain.com
+  - host: staging-api.realcart.shop
     http:
       paths:
       - path: /

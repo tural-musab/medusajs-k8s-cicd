@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Deploying MedusaJS to Production Environment"
+echo "🚀 Deploying realcart.shop to Production Environment"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -81,7 +81,7 @@ kubectl get services -n medusajs-production
 kubectl get ingress -n medusajs-production
 
 echo ""
-echo -e "${GREEN}🎉 Production deployment completed successfully!${NC}"
+echo -e "${GREEN}🎉 realcart.shop production deployment completed!${NC}"
 echo ""
 echo -e "${YELLOW}📌 Post-deployment checklist:${NC}"
 echo "1. ✅ Verify all pods are running"
@@ -90,6 +90,12 @@ echo "3. ✅ Test API endpoints"
 echo "4. ✅ Verify storefront accessibility"
 echo "5. ✅ Monitor logs and metrics"
 echo ""
+echo -e "${BLUE}🌐 Your live URLs:${NC}"
+echo "🛒 Storefront: https://realcart.shop"
+echo "🔧 Admin Panel: https://api.realcart.shop/admin"
+echo "📊 API Health: https://api.realcart.shop/health"
+echo ""
 echo -e "${BLUE}🔍 Monitoring commands:${NC}"
 echo "kubectl logs -f deployment/prod-medusa-backend -n medusajs-production"
 echo "kubectl get events -n medusajs-production --sort-by='.lastTimestamp'"
+echo "kubectl get certificates -n medusajs-production"

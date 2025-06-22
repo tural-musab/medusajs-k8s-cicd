@@ -1,6 +1,11 @@
-# 🏪 MedusaJS Kubernetes E-commerce Platform
+# 🛒 realcart.shop - Enterprise E-commerce Platform
 
-Modern, scalable e-commerce solution built with MedusaJS 2.0 and deployed on Kubernetes.
+Production-ready e-commerce solution built with MedusaJS 2.0, Next.js 14, and deployed on Kubernetes.
+
+**Live URLs:**
+- 🛒 **Storefront**: https://realcart.shop
+- 🔧 **Admin Panel**: https://api.realcart.shop/admin  
+- 📊 **API Health**: https://api.realcart.shop/health
 
 ## 🚀 Features
 

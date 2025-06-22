@@ -13,6 +13,7 @@ commonLabels:
   environment: staging
   
 patchesStrategicMerge:
+- secrets.yaml
 - replica-patch.yaml
 - config-patch.yaml
 - image-patch.yaml

@@ -9,11 +9,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.your-domain.com
-    - store.your-domain.com
+    - api.realcart.shop
+    - realcart.shop
     secretName: production-tls-secret
   rules:
-  - host: store.your-domain.com
+  - host: realcart.shop
     http:
       paths:
       - path: /
@@ -23,7 +23,7 @@ spec:
             name: storefront-service
             port:
               number: 3000
-  - host: api.your-domain.com
+  - host: api.realcart.shop
     http:
       paths:
       - path: /

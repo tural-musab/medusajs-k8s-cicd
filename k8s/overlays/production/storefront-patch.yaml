@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: storefront-config
 data:
-  NEXT_PUBLIC_BASE_URL: "https://store.your-domain.com"
+  NEXT_PUBLIC_BASE_URL: "https://realcart.shop"
 
 ---
 apiVersion: apps/v1
